@@ -1,0 +1,7 @@
+pip==24.2
+
+pytest==8.3.2
+pytest-runner==6.0.1
+ipython
+ipdb
+python-dotenv==1.0.1

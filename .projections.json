@@ -1,0 +1,10 @@
+    {
+      "tenzing/*.py": {
+        "alternate": "tests/test_{}.py",
+        "type": "source"
+      },
+      "tests/test_{}.py": {
+        "alternate": "tenzing/*.py",
+        "type": "test"
+      }
+    }
