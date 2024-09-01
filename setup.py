@@ -11,7 +11,13 @@ with open("README.rst") as readme_file:
 with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
-requirements = ["click==8.1.7", "rich==13.8.0", "requests==2.32.3", "pydantic==2.8.2"]
+requirements = [
+    "click==8.1.7",
+    "rich==13.8.0",
+    "requests==2.32.3",
+    "pydantic==2.8.2",
+    "basecampy3==0.7.2",
+]
 
 setup_requirements = [
     "pytest-runner",
@@ -30,10 +36,9 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.11",
     ],
-    description="A utility for interacting with Basecamp 4",
+    description="A CLI utility for interacting with Basecamp 4 API",
     entry_points={
         "console_scripts": [
             "tenzing=tenzing.cli:main",
