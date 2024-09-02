@@ -1,0 +1,90 @@
+{
+    "id": 88382868,
+    "status": "active",
+    "created_at": "2024-07-17T13:38:42.697Z",
+    "updated_at": "2024-08-05T16:06:58.907Z",
+    "name": "Counting all the numbers, starting with 1",
+    "description": "",
+    "purpose": "topic",
+    "clients_enabled": false,
+    "timesheet_enabled": false,
+    "color": null,
+    "bookmark_url": "https://3.basecampapi.com/777/my/bookmarks/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaEpJaWxuYVdRNkx5OWlZek12UW5WamEyVjBMek00TXpVeU1EWTBQMlY0Y0dseVpYTmZhVzRHT2daRlZBPT0iLCJleHAiOm51bGwsInB1ciI6InJlYWRhYmxlIn19--b1496d85a420c60550548d51cee062e84f98fecb.json",
+    "url": "https://3.basecampapi.com/777/projects/38352064.json",
+    "app_url": "https://3.basecamp.com/777/projects/38352064",
+    "dock": [
+        {
+            "id": 7616354845,
+            "title": "Message Board",
+            "name": "message_board",
+            "enabled": true,
+            "position": 1,
+            "url": "https://3.basecampapi.com/777/buckets/38352064/message_boards/7616354845.json",
+            "app_url": "https://3.basecamp.com/777/buckets/38352064/message_boards/7616354845"
+        },
+        {
+            "id": 7616354850,
+            "title": "To-dos",
+            "name": "todoset",
+            "enabled": true,
+            "position": 2,
+            "url": "https://3.basecampapi.com/777/buckets/38352064/todosets/7616354850.json",
+            "app_url": "https://3.basecamp.com/777/buckets/38352064/todosets/7616354850"
+        },
+        {
+            "id": 7616354853,
+            "title": "Docs & Files",
+            "name": "vault",
+            "enabled": true,
+            "position": 3,
+            "url": "https://3.basecampapi.com/777/buckets/38352064/vaults/7616354853.json",
+            "app_url": "https://3.basecamp.com/777/buckets/38352064/vaults/7616354853"
+        },
+        {
+            "id": 7616354856,
+            "title": "Chat",
+            "name": "chat",
+            "enabled": true,
+            "position": 4,
+            "url": "https://3.basecampapi.com/777/buckets/38352064/chats/7616354856.json",
+            "app_url": "https://3.basecamp.com/777/buckets/38352064/chats/7616354856"
+        },
+        {
+            "id": 7616354858,
+            "title": "Schedule",
+            "name": "schedule",
+            "enabled": true,
+            "position": 5,
+            "url": "https://3.basecampapi.com/777/buckets/38352064/schedules/7616354858.json",
+            "app_url": "https://3.basecamp.com/777/buckets/38352064/schedules/7616354858"
+        },
+        {
+            "id": 7616354860,
+            "title": "Automatic Check-ins",
+            "name": "questionnaire",
+            "enabled": false,
+            "position": null,
+            "url": "https://3.basecampapi.com/777/buckets/38352064/questionnaires/7616354860.json",
+            "app_url": "https://3.basecamp.com/777/buckets/38352064/questionnaires/7616354860"
+        },
+        {
+            "id": 7616354863,
+            "title": "Email Forwards",
+            "name": "inbox",
+            "enabled": false,
+            "position": null,
+            "url": "https://3.basecampapi.com/777/buckets/38352064/inboxes/7616354863.json",
+            "app_url": "https://3.basecamp.com/777/buckets/38352064/inboxes/7616354863"
+        },
+        {
+            "id": 7616354867,
+            "title": "Card Table",
+            "name": "kanban_board",
+            "enabled": true,
+            "position": 6,
+            "url": "https://3.basecampapi.com/777/buckets/38352064/card_tables/7616354867.json",
+            "app_url": "https://3.basecamp.com/777/buckets/38352064/card_tables/7616354867"
+        }
+    ],
+    "bookmarked": false
+}
