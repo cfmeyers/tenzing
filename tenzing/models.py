@@ -12,9 +12,8 @@ class BasecampObject(BaseModel):
 
     @classmethod
     def from_api_data(cls: Type[T], data: object) -> T:
-        values = data.__dict__["_values"].copy()  # Create a copy of the dictionary
+        values = data.__dict__["_values"].copy()
 
-        # Parse datetime strings
         for field in ["created_at", "updated_at"]:
             if field in values and isinstance(values[field], str):
                 values[field] = datetime.fromisoformat(values[field].rstrip("Z"))
