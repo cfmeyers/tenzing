@@ -1,0 +1,26 @@
+{
+    "id": 46163014,
+    "attachable_sgid": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX0=--YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+    "name": "Bugs Bunny",
+    "email_address": "bugs@example.com",
+    "personable_type": "User",
+    "title": "",
+    "bio": "",
+    "location": "Acme, California",
+    "created_at": "2024-06-06T18:50:24.605Z",
+    "updated_at": "2024-07-13T20:59:37.928Z",
+    "admin": false,
+    "owner": false,
+    "client": false,
+    "employee": true,
+    "time_zone": "America/New_York",
+    "avatar_url": "https://bc3-production-assets-cdn.basecamp-static.com/888/people/BAhpBEZkwAI=--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/avatar?v=1",
+    "company": {
+        "id": 777,
+        "name": "Merry Melodies, LLC"
+    },
+    "can_ping": true,
+    "can_manage_projects": true,
+    "can_manage_people": true,
+    "can_access_timesheet": true
+}
