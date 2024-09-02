@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from tenzing.basecamp_api import BasecampAPI
-from tenzing.models import ProjectView
+from tenzing.models import ProjectView, UserView, CompanyView
 from datetime import datetime, timezone
 
 
@@ -11,7 +11,7 @@ class TestBasecampAPI:
             BasecampAPI()
             mock_basecamp3.from_environment.assert_called_once()
 
-    def test_list_projects_returns_list_of_project_views(self):
+    def test_get_projects_returns_list_of_project_views(self):
         # Arrange
         expected = [
             ProjectView(
@@ -59,15 +59,43 @@ class TestBasecampAPI:
             api = BasecampAPI()
 
         # Act
-        actual = api.list_projects()
+        actual = api.get_projects()
 
         # Assert
         assert expected == actual
 
-    def test_list_projects_returns_empty_list_when_no_projects(self):
+    def test_get_users_returns_list_of_user_views(self):
         # Arrange
+        expected = [
+            UserView(
+                id=1,
+                created_at=datetime(2024, 1, 1, tzinfo=timezone.utc),
+                updated_at=datetime(2024, 1, 2, tzinfo=timezone.utc),
+                name="John Doe",
+                email_address="john@example.com",
+                admin=True,
+                company=CompanyView(
+                    id=101,
+                    created_at=datetime(2024, 1, 1, tzinfo=timezone.utc),
+                    updated_at=datetime(2024, 1, 1, tzinfo=timezone.utc),
+                    name="Example Corp",
+                ),
+            ),
+            UserView(
+                id=2,
+                created_at=datetime(2024, 2, 1, tzinfo=timezone.utc),
+                updated_at=datetime(2024, 2, 2, tzinfo=timezone.utc),
+                name="Jane Smith",
+                email_address="jane@example.com",
+                admin=False,
+                company=None,
+            ),
+        ]
+
         mock_bc3 = Mock()
-        mock_bc3.projects.list.return_value = []
+        mock_bc3.people.list.return_value = [
+            MagicMock(_values=user.model_dump()) for user in expected
+        ]
 
         with patch(
             "tenzing.basecamp_api.Basecamp3.from_environment", return_value=mock_bc3
@@ -75,7 +103,7 @@ class TestBasecampAPI:
             api = BasecampAPI()
 
         # Act
-        actual = api.list_projects()
+        actual = api.get_users()
 
         # Assert
-        assert actual == []
+        assert expected == actual

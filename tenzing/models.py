@@ -22,6 +22,11 @@ class BasecampObject(BaseModel):
         return cls(**values)
 
 
+class CompanyView(BaseModel):
+    id: int
+    name: str
+
+
 class ProjectView(BasecampObject):
     status: str
     name: str
@@ -38,3 +43,21 @@ class ProjectView(BasecampObject):
 
     class Config:
         populate_by_name = True
+
+
+class UserView(BasecampObject):
+    name: str
+    email_address: str
+    admin: bool
+    company: Optional[CompanyView] = None
+    attachable_sgid: Optional[str] = None
+    personable_type: Optional[str] = None
+    owner: Optional[bool] = None
+    client: Optional[bool] = None
+    employee: Optional[bool] = None
+    time_zone: Optional[str] = None
+    avatar_url: Optional[str] = None
+    can_ping: Optional[bool] = None
+    can_manage_projects: Optional[bool] = None
+    can_manage_people: Optional[bool] = None
+    can_access_timesheet: Optional[bool] = None
