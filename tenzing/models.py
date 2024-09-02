@@ -1,17 +1,15 @@
-from pydantic import BaseModel, Field
-from typing import Optional, ClassVar, Type, TypeVar
+from pydantic import BaseModel
+from typing import Optional
 from datetime import datetime
 
-T = TypeVar("T", bound="BasecampObject")
 
-
-class BasecampObject(BaseModel):
+class BaseCampEntityView(BaseModel):
     id: int
     created_at: datetime
     updated_at: datetime
 
     @classmethod
-    def from_api_data(cls: Type[T], data: object) -> T:
+    def from_api_data(cls, data: object):
         values = data.__dict__["_values"].copy()
 
         for field in ["created_at", "updated_at"]:
@@ -21,12 +19,7 @@ class BasecampObject(BaseModel):
         return cls(**values)
 
 
-class CompanyView(BaseModel):
-    id: int
-    name: str
-
-
-class ProjectView(BasecampObject):
+class ProjectView(BaseCampEntityView):
     status: str
     name: str
     description: str
@@ -44,11 +37,11 @@ class ProjectView(BasecampObject):
         populate_by_name = True
 
 
-class UserView(BasecampObject):
+class UserView(BaseCampEntityView):
     name: str
     email_address: str
     admin: bool
-    company: Optional[CompanyView] = None
+    company: Optional[dict] = None
     attachable_sgid: Optional[str] = None
     personable_type: Optional[str] = None
     owner: Optional[bool] = None
@@ -60,3 +53,31 @@ class UserView(BasecampObject):
     can_manage_projects: Optional[bool] = None
     can_manage_people: Optional[bool] = None
     can_access_timesheet: Optional[bool] = None
+
+
+class TodoListView(BaseCampEntityView):
+    status: str
+    visible_to_clients: bool
+    title: str
+    inherits_status: bool
+    type: str
+    url: str
+    app_url: str
+    bookmark_url: str
+    subscription_url: str
+    comments_count: int
+    comments_url: str
+    position: int
+    parent: dict
+    bucket: dict
+    creator: dict
+    description: str
+    completed: bool
+    completed_ratio: str
+    name: str
+    todos_url: str
+    groups_url: str
+    app_todos_url: str
+
+    class Config:
+        populate_by_name = True

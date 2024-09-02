@@ -8,7 +8,8 @@ from rich import print as rprint
 from rich.table import Table
 
 from tenzing.basecamp_api import BasecampAPI
-from tenzing.models import ProjectView, UserView
+from basecampy3.endpoints.projects import Project as Basecampy3Project
+from tenzing.models import ProjectView, TodoListView, UserView
 
 
 @click.group()
@@ -66,21 +67,55 @@ def list_users():
     rprint(table)
 
 
-# You can add more commands here in the future, for example:
-# @main.command()
-# def another_command():
-#     pass
+@main.command()
+@click.argument("project", type=str)
+def list_todolists(project):
+    """List all todo lists for a specified project ID or name."""
+    api = BasecampAPI()
+    basecamp_projects: list[Basecampy3Project] = api.get_basecamp_projects()
+
+    # Find the project by ID or name
+    target_project = next(
+        (
+            p
+            for p in basecamp_projects
+            if str(p.id) == project or p.name.lower() == project.lower()
+        ),
+        None,
+    )
+
+    if not target_project:
+        rprint(f"[red]Error:[/red] Project '{project}' not found.")
+        return
+
+    try:
+        todolists: list[TodoListView] = api.get_todolists_for_project(target_project)
+    except Exception as e:
+        rprint(
+            f"[red]Error:[/red] Failed to fetch todo lists for project '{target_project.name}'. {str(e)}"
+        )
+        return
+
+    table = Table(
+        title=f"Todo Lists for Project: {target_project.name} (ID: {target_project.id})"
+    )
+    table.add_column("ID", style="cyan")
+    table.add_column("Name", style="magenta")
+    table.add_column("Description", style="green")
+    table.add_column("Completed", style="yellow")
+    table.add_column("Completed Ratio", style="blue")
+
+    for todolist in todolists:
+        table.add_row(
+            str(todolist.id),
+            todolist.name,
+            todolist.description or "",
+            "Yes" if todolist.completed else "No",
+            todolist.completed_ratio,
+        )
+
+    rprint(table)
+
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
-
-# project = projects[0]
-
-# dir(project)
-# project.__dict__
-
-# dump project.__dict__ as json to a file
-# import json
-
-# with open("example-entities/project.json", "w") as f:
-#     json.dump(project.__dict__["_values"], f, indent=4)
