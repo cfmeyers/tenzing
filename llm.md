@@ -1,4 +1,4 @@
-# tenzing Overfiew
+# tenzing Overview
 I'm writing a Python CLI called `tenzing` that will interact with the Basecamp (project management software) API via the basecampy3 Python library.
 
 `tenzing` will use the following libraries:
