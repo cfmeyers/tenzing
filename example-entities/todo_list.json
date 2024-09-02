@@ -1,0 +1,62 @@
+{
+    "id": 123,
+    "status": "active",
+    "visible_to_clients": false,
+    "created_at": "2024-07-16T16:54:32.493Z",
+    "updated_at": "2024-08-29T04:17:44.778Z",
+    "title": "DUMP",
+    "inherits_status": true,
+    "type": "Todolist",
+    "url": "https://3.basecampapi.com/777/buckets/555/todolists/123.json",
+    "app_url": "https://3.basecamp.com/777/buckets/555/todolists/123",
+    "bookmark_url": "https://3.basecampapi.com/777/my/bookmarks/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==--YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY.json",
+    "subscription_url": "https://3.basecampapi.com/777/buckets/555/recordings/123/subscription.json",
+    "comments_count": 0,
+    "comments_url": "https://3.basecampapi.com/777/buckets/555/recordings/123/comments.json",
+    "position": 1,
+    "parent": {
+        "id": 999,
+        "title": "Data Warehouse TODOs \u267e\ufe0f",
+        "type": "Todoset",
+        "url": "https://3.basecampapi.com/777/buckets/555/todosets/999.json",
+        "app_url": "https://3.basecamp.com/777/buckets/555/todosets/999"
+    },
+    "bucket": {
+        "id": 555,
+        "name": "TECH TEAM",
+        "type": "Project"
+    },
+    "creator": {
+        "id": 46163014,
+        "attachable_sgid": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=--YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+        "name": "Bugs Bunny",
+        "email_address": "bugs@acme.com",
+        "personable_type": "User",
+        "title": "",
+        "bio": "",
+        "location": "Reston, Virginia",
+        "created_at": "2024-06-06T18:50:24.605Z",
+        "updated_at": "2024-07-13T20:59:37.928Z",
+        "admin": false,
+        "owner": false,
+        "client": false,
+        "employee": true,
+        "time_zone": "America/New_York",
+        "avatar_url": "https://bc3-production-assets-cdn.basecamp-static.com/777/people/BAhpBEZkwAI=--6f30e6dd38481991e1b0856c83a77e2f1dc64497/avatar?v=1",
+        "company": {
+            "id": 22222,
+            "name": "Catalyst Power, LLC"
+        },
+        "can_ping": true,
+        "can_manage_projects": true,
+        "can_manage_people": true,
+        "can_access_timesheet": true
+    },
+    "description": "",
+    "completed": true,
+    "completed_ratio": "1/1",
+    "name": "DUMP",
+    "todos_url": "https://3.basecampapi.com/777/buckets/555/todolists/123/todos.json",
+    "groups_url": "https://3.basecampapi.com/777/buckets/555/todolists/123/groups.json",
+    "app_todos_url": "https://3.basecamp.com/777/buckets/555/todolists/123/todos"
+}
