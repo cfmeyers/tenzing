@@ -165,15 +165,12 @@ class TestBasecampAPI:
         ):
             api = BasecampAPI()
 
-            # Mock the non-existent get_basecamp_todolists method
-            api.get_basecamp_todolists = Mock(return_value=mock_bc3.todolists.list())
-
         # Act
         actual = api.get_todolists_for_project(project)
 
         # Assert
         assert expected_todolists == actual
-        api.get_basecamp_todolists.assert_called_once_with(project)
+        mock_bc3.todolists.list.assert_called_once_with(project=project)
 
     def test_get_todo_items_for_todo_list(self):
         # Arrange

@@ -7,9 +7,7 @@ import click
 from rich import print as rprint
 from rich.table import Table
 
-from tenzing.basecamp_api import BasecampAPI
-from basecampy3.endpoints.projects import Project as Basecampy3Project
-from basecampy3.endpoints.todolists import TodoList as Basecampy3TodoList
+from tenzing.basecamp_api import BasecampAPI, RawProject
 from tenzing.models import ProjectView, TodoListView, UserView, TodoItemView
 
 
@@ -52,7 +50,7 @@ def list_users():
     table.add_column("Name", style="magenta")
     table.add_column("Email Address", style="green")
     table.add_column("Admin", style="yellow")
-    table.add_column("Company", style="blue")  # New column for company
+    table.add_column("Company", style="blue")
 
     for user in users:
         table.add_row(
@@ -60,9 +58,7 @@ def list_users():
             user.name,
             user.email_address,
             "Yes" if user.admin else "No",
-            (
-                user.company.name if user.company else "N/A"
-            ),  # Add company name or N/A if no company
+            user.company.get("name", "N/A") if user.company else "N/A",
         )
 
     rprint(table)
@@ -73,13 +69,13 @@ def list_users():
 def list_todolists(project):
     """List all todo lists for a specified project ID or name."""
     api = BasecampAPI()
-    basecamp_projects: list[Basecampy3Project] = api.get_basecamp_projects()
+    raw_projects: list[RawProject] = api.get_raw_projects()
 
     # Find the project by ID or name
     target_project = next(
         (
             p
-            for p in basecamp_projects
+            for p in raw_projects
             if str(p.id) == project or p.name.lower() == project.lower()
         ),
         None,
@@ -126,13 +122,13 @@ def list_todo_items(project_id, todo_list_id):
     api = BasecampAPI()
 
     # Find the project
-    target_project = api.get_basecamp_project(project_id)
+    target_project = api.get_raw_project(project_id)
     if not target_project:
         rprint(f"[red]Error:[/red] Project with ID '{project_id}' not found.")
         return
 
     # Find the todo list within the project
-    todolists = api.get_basecamp_todolists_for_project(target_project)
+    todolists = api.get_raw_todolists_for_project(target_project)
     target_todolist = next((tl for tl in todolists if str(tl.id) == todo_list_id), None)
 
     if not target_todolist:
