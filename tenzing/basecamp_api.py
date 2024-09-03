@@ -30,6 +30,14 @@ class BasecampAPI:
     def get_raw_todolists_for_project(self, project: RawProject) -> list[RawTodoList]:
         return list(self.bc3.todolists.list(project=project))
 
+    def get_raw_todo_lists(self) -> list[RawTodoList]:
+        raw_projects = self.get_raw_projects()
+        all_todolists = []
+        for project in raw_projects:
+            project_todolists = self.get_raw_todolists_for_project(project)
+            all_todolists.extend(project_todolists)
+        return all_todolists
+
     def get_projects(self) -> list[ProjectView]:
         raw_projects = self.get_raw_projects()
         return [ProjectView.from_api_data(project) for project in raw_projects]
@@ -43,13 +51,25 @@ class BasecampAPI:
         return [TodoListView.from_api_data(todolist) for todolist in raw_todolists]
 
     def get_todolists(self) -> list[TodoListView]:
-        raw_projects = self.get_raw_projects()
-        all_todolists = []
-        for project in raw_projects:
-            project_todolists = self.get_todolists_for_project(project)
-            all_todolists.extend(project_todolists)
-        return all_todolists
+        raw_todolists = self.get_raw_todo_lists()
+        return [TodoListView.from_api_data(todolist) for todolist in raw_todolists]
 
     def get_todo_items_for_todo_list(self, todolist: RawTodoList) -> list[TodoItemView]:
         raw_todos = self.get_raw_todos_for_todolist(todolist)
         return [TodoItemView.from_api_data(todo) for todo in raw_todos]
+
+    def get_todo_items(
+        self, raw_projects: list[RawProject] | None = None
+    ) -> list[TodoItemView]:
+        if raw_projects is None:
+            raw_todolists = self.get_raw_todo_lists()
+        else:
+            raw_todolists = []
+            for project in raw_projects:
+                raw_todolists.extend(self.get_raw_todolists_for_project(project))
+
+        all_todo_items = []
+        for todolist in raw_todolists:
+            todo_items = self.get_todo_items_for_todo_list(todolist)
+            all_todo_items.extend(todo_items)
+        return all_todo_items
