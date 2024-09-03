@@ -1,0 +1,90 @@
+{
+    "id": 12345,
+    "status": "active",
+    "visible_to_clients": false,
+    "created_at": "2024-06-20T14:25:36.116Z",
+    "updated_at": "2024-07-16T16:55:46.753Z",
+    "title": "Document how to use dbt to model data",
+    "inherits_status": true,
+    "type": "Todo",
+    "url": "https://3.basecampapi.com/777/buckets/888/todos/12345.json",
+    "app_url": "https://3.basecamp.com/777/buckets/888/todos/12345",
+    "bookmark_url": "https://3.basecampapi.com/777/my/bookmarks/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==--YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY.json",
+    "subscription_url": "https://3.basecampapi.com/777/buckets/888/recordings/12345/subscription.json",
+    "comments_count": 0,
+    "comments_url": "https://3.basecampapi.com/777/buckets/888/recordings/12345/comments.json",
+    "position": 1,
+    "parent": {
+        "id": 7612632392,
+        "title": "Usability",
+        "type": "Todolist",
+        "url": "https://3.basecampapi.com/777/buckets/888/todolists/7612632392.json",
+        "app_url": "https://3.basecamp.com/777/buckets/888/todolists/7612632392"
+    },
+    "bucket": {
+        "id": 888,
+        "name": "TECH TEAM",
+        "type": "Project"
+    },
+    "creator": {
+        "id": 46163014,
+        "attachable_sgid": "eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaEpJaWxuYVdRNkx5OWlZek12VUdWeWMyOXVMelEyTVRZek1ERTBQMlY0Y0dseVpYTmZhVzRHT2daRlZBPT0iLCJleHAiOm51bGwsInB1ciI6ImF0dGFjaGFibGUifX0=--3b5fb58f7b278e2a761276c0ba1f3861a5154056",
+        "name": "Bugs Bunny",
+        "email_address": "bugs@acme.com",
+        "personable_type": "User",
+        "title": "",
+        "bio": "",
+        "location": "Reston, Virginia",
+        "created_at": "2024-06-06T18:50:24.605Z",
+        "updated_at": "2024-07-13T20:59:37.928Z",
+        "admin": false,
+        "owner": false,
+        "client": false,
+        "employee": true,
+        "time_zone": "America/New_York",
+        "avatar_url": "https://bc3-production-assets-cdn.basecamp-static.com/777/people/BAhpBEZkwAI=--6f30e6dd38481991e1b0856c83a77e2f1dc64497/avatar?v=1",
+        "company": {
+            "id": 3657073,
+            "name": "Catalyst Power, LLC"
+        },
+        "can_ping": true,
+        "can_manage_projects": true,
+        "can_manage_people": true,
+        "can_access_timesheet": true
+    },
+    "description": "<div>Screencasts, Basecamp docs.<br>Document:<br>- creating new models in dbt<br>- changing existing models in dbt<br>- writing tests and documentation<br>- integrating dbt models into a Prefect flow (through dbt tags and the dbt adapter we've got set up for Prefect)</div>",
+    "completed": false,
+    "content": "Document how to use dbt to model data",
+    "starts_on": null,
+    "due_on": null,
+    "assignees": [
+        {
+            "id": 46163014,
+            "attachable_sgid": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=--YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+            "name": "Bugs Bunny",
+            "email_address": "bugs@acme.com",
+            "personable_type": "User",
+            "title": "",
+            "bio": "",
+            "location": "Reston, Virginia",
+            "created_at": "2024-06-06T18:50:24.605Z",
+            "updated_at": "2024-07-13T20:59:37.928Z",
+            "admin": false,
+            "owner": false,
+            "client": false,
+            "employee": true,
+            "time_zone": "America/New_York",
+            "avatar_url": "https://bc3-production-assets-cdn.basecamp-static.com/777/people/BAhpBEZkwAI=--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/avatar?v=1",
+            "company": {
+                "id": 90210,
+                "name": "Acme LLC"
+            },
+            "can_ping": true,
+            "can_manage_projects": true,
+            "can_manage_people": true,
+            "can_access_timesheet": true
+        }
+    ],
+    "completion_subscribers": [],
+    "completion_url": "https://3.basecampapi.com/777/buckets/888/todos/12345/completion.json"
+}
