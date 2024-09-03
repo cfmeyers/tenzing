@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, date
 
 
 class BaseCampEntityView(BaseModel):
@@ -78,6 +78,35 @@ class TodoListView(BaseCampEntityView):
     todos_url: str
     groups_url: str
     app_todos_url: str
+
+    class Config:
+        populate_by_name = True
+
+
+class TodoItemView(BaseCampEntityView):
+    status: str
+    visible_to_clients: bool
+    title: str
+    inherits_status: bool
+    type: str
+    url: str
+    app_url: str
+    bookmark_url: str
+    subscription_url: str
+    comments_count: int
+    comments_url: str
+    position: int
+    parent: dict
+    bucket: dict
+    creator: dict
+    description: str
+    completed: bool
+    content: str
+    starts_on: Optional[date] = None
+    due_on: Optional[date] = None
+    assignees: list[dict]
+    completion_subscribers: list[dict]
+    completion_url: str
 
     class Config:
         populate_by_name = True

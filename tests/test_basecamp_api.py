@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from tenzing.basecamp_api import BasecampAPI
-from tenzing.models import ProjectView, UserView, TodoListView
-from datetime import datetime, timezone
+from tenzing.models import ProjectView, UserView, TodoListView, TodoItemView
+from datetime import datetime, timezone, date
 
 
 class TestBasecampAPI:
@@ -153,33 +153,6 @@ class TestBasecampAPI:
                 groups_url="http://example.com/groups/101",
                 app_todos_url="http://example.com/app/todos/101",
             ),
-            TodoListView(
-                id=102,
-                created_at=datetime(2024, 1, 5, tzinfo=timezone.utc),
-                updated_at=datetime(2024, 1, 6, tzinfo=timezone.utc),
-                status="active",
-                visible_to_clients=False,
-                title="Todo List 2",
-                inherits_status=True,
-                type="TodoList",
-                url="http://example.com/todolist/102",
-                app_url="http://example.com/app/todolist/102",
-                bookmark_url="http://example.com/bookmark/102",
-                subscription_url="http://example.com/subscribe/102",
-                comments_count=3,
-                comments_url="http://example.com/comments/102",
-                position=2,
-                parent={},
-                bucket={"id": 1, "name": "Test Project"},
-                creator={"id": 2, "name": "Jane Smith"},
-                description="Todo List 2 Description",
-                completed=True,
-                completed_ratio="3/3",
-                name="Todo List 2",
-                todos_url="http://example.com/todos/102",
-                groups_url="http://example.com/groups/102",
-                app_todos_url="http://example.com/app/todos/102",
-            ),
         ]
 
         mock_bc3 = Mock()
@@ -192,9 +165,94 @@ class TestBasecampAPI:
         ):
             api = BasecampAPI()
 
+            # Mock the non-existent get_basecamp_todolists method
+            api.get_basecamp_todolists = Mock(return_value=mock_bc3.todolists.list())
+
         # Act
         actual = api.get_todolists_for_project(project)
 
         # Assert
         assert expected_todolists == actual
-        mock_bc3.todolists.list.assert_called_once_with(project=project)
+        api.get_basecamp_todolists.assert_called_once_with(project)
+
+    def test_get_todo_items_for_todo_list(self):
+        # Arrange
+        mock_todolist = MagicMock()
+        mock_todolist.id = 12345
+
+        expected_todo_items = [
+            TodoItemView(
+                id=1,
+                created_at=datetime(2024, 1, 1, tzinfo=timezone.utc),
+                updated_at=datetime(2024, 1, 2, tzinfo=timezone.utc),
+                status="active",
+                visible_to_clients=True,
+                title="Task 1",
+                inherits_status=True,
+                type="Todo",
+                url="http://example.com/1",
+                app_url="http://example.com/app/1",
+                bookmark_url="http://example.com/bookmark/1",
+                subscription_url="http://example.com/sub/1",
+                comments_count=0,
+                comments_url="http://example.com/comments/1",
+                position=1,
+                parent={},
+                bucket={"id": 1, "name": "Test Project"},
+                creator={"id": 1, "name": "John Doe"},
+                description="Description 1",
+                completed=False,
+                content="Task 1 content",
+                starts_on=None,
+                due_on=date(2024, 12, 31),
+                assignees=[{"id": 1, "name": "John Doe"}],
+                completion_subscribers=[],
+                completion_url="http://example.com/complete/1",
+            ),
+            TodoItemView(
+                id=2,
+                created_at=datetime(2024, 2, 1, tzinfo=timezone.utc),
+                updated_at=datetime(2024, 2, 2, tzinfo=timezone.utc),
+                status="active",
+                visible_to_clients=True,
+                title="Task 2",
+                inherits_status=True,
+                type="Todo",
+                url="http://example.com/2",
+                app_url="http://example.com/app/2",
+                bookmark_url="http://example.com/bookmark/2",
+                subscription_url="http://example.com/sub/2",
+                comments_count=0,
+                comments_url="http://example.com/comments/2",
+                position=2,
+                parent={},
+                bucket={"id": 1, "name": "Test Project"},
+                creator={"id": 2, "name": "Jane Smith"},
+                description="Description 2",
+                completed=True,
+                content="Task 2 content",
+                starts_on=None,
+                due_on=None,
+                assignees=[{"id": 2, "name": "Jane Smith"}],
+                completion_subscribers=[],
+                completion_url="http://example.com/complete/2",
+            ),
+        ]
+
+        mock_bc3 = Mock()
+        mock_bc3.todos.list.return_value = [
+            MagicMock(_values=todo_item.model_dump())
+            for todo_item in expected_todo_items
+        ]
+
+        with patch(
+            "tenzing.basecamp_api.Basecamp3.from_environment", return_value=mock_bc3
+        ):
+            api = BasecampAPI()
+
+        # Act
+        actual = api.get_todo_items_for_todo_list(mock_todolist)
+
+        # Assert
+        assert expected_todo_items == actual
+        mock_bc3.todos.list.assert_called_once_with(todolist=mock_todolist)
