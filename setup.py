@@ -17,6 +17,7 @@ requirements = [
     "requests==2.32.3",
     "pydantic==2.8.2",
     "basecampy3==0.7.2",
+    "SQLAlchemy==2.0.34",
 ]
 
 setup_requirements = [

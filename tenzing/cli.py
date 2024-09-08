@@ -9,6 +9,7 @@ from rich.table import Table
 
 from tenzing.basecamp_api import BasecampAPI, RawProject
 from tenzing.models import ProjectView, TodoListView, UserView, TodoItemView
+from tenzing.persist import fully_refresh_db
 
 
 @click.group()
@@ -174,6 +175,19 @@ def list_todo_items(project_id, todo_list_id):
         )
 
     rprint(table)
+
+
+@main.command()
+def refresh_db():
+    """Fetch all projects from Basecamp API and refresh the local database."""
+    api = BasecampAPI()
+    try:
+        fully_refresh_db(api)
+        rprint(
+            "[green]Successfully refreshed the database with latest Basecamp data.[/green]"
+        )
+    except Exception as e:
+        rprint(f"[red]Error:[/red] Failed to refresh the database. {str(e)}")
 
 
 if __name__ == "__main__":
