@@ -38,6 +38,7 @@ class ProjectView(BaseCampEntityView):
     bookmarked: bool
 
     class Config:
+        from_attributes = True
         populate_by_name = True
 
 
@@ -57,6 +58,9 @@ class UserView(BaseCampEntityView):
     can_manage_projects: Optional[bool] = None
     can_manage_people: Optional[bool] = None
     can_access_timesheet: Optional[bool] = None
+
+    class Config:
+        from_attributes = True
 
 
 class TodoListView(BaseCampEntityView):
@@ -86,6 +90,7 @@ class TodoListView(BaseCampEntityView):
     app_todos_url: str
 
     class Config:
+        from_attributes = True
         populate_by_name = True
 
 
@@ -117,4 +122,5 @@ class TodoItemView(BaseCampEntityView):
     completion_url: str
 
     class Config:
+        from_attributes = True
         populate_by_name = True
