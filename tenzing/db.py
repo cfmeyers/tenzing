@@ -117,7 +117,7 @@ class TodoItem(BaseCampEntity):
     comments_count = Column(Integer)
     comments_url = Column(String)
     position = Column(Integer)
-    parent = Column(JSON)  # Keep this field
+    parent = Column(JSON)
     bucket = Column(JSON)
     creator = Column(JSON)
     description = Column(String)
@@ -126,6 +126,7 @@ class TodoItem(BaseCampEntity):
     starts_on = Column(Date)
     due_on = Column(Date)
     assignees = Column(JSON)
+    assignee_ids = Column(JSON)
     completion_subscribers = Column(JSON)
     completion_url = Column(String)
 

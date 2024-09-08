@@ -20,6 +20,11 @@ class BaseCampEntityView(BaseModel):
             values["parent_id"] = values["parent"].get("id")
             values["parent_type"] = values["parent"].get("type")
 
+        if "assignees" in values and isinstance(values["assignees"], list):
+            values["assignee_ids"] = [
+                str(assignee["id"]) for assignee in values["assignees"]
+            ]
+
         return cls(**values)
 
 
@@ -118,6 +123,7 @@ class TodoItemView(BaseCampEntityView):
     starts_on: Optional[date] = None
     due_on: Optional[date] = None
     assignees: list[dict]
+    assignee_ids: list[str]  # Add this line
     completion_subscribers: list[dict]
     completion_url: str
 
