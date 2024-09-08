@@ -102,3 +102,4 @@ ENV/
 .mypy_cache/
 collin-env/
 scratch.py
+.vscode/
