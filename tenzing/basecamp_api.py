@@ -59,17 +59,30 @@ class BasecampAPI:
         return [TodoItemView.from_api_data(todo) for todo in raw_todos]
 
     def get_todo_items(
-        self, raw_projects: list[RawProject] | None = None
+        self, project_ids: list[str] | None = None
     ) -> list[TodoItemView]:
-        if raw_projects is None:
+        if project_ids is None:
             raw_todolists = self.get_raw_todo_lists()
+            all_todo_items = self._process_todolists(raw_todolists)
         else:
-            raw_todolists = []
-            for project in raw_projects:
-                raw_todolists.extend(self.get_raw_todolists_for_project(project))
+            print("Fetching todo items for the following projects:")
+            all_todo_items = []
+            for project_id in project_ids:
+                project = self.get_raw_project(project_id)
+                if project:
+                    print(f"  - Project ID: {project_id}, Name: {project.name}")
+                    raw_todolists = self.get_raw_todolists_for_project(project)
+                    project_todo_items = self._process_todolists(raw_todolists)
+                    all_todo_items.extend(project_todo_items)
+                    print(f"    Number of todo items: {len(project_todo_items)}")
+                else:
+                    print(f"  - Project ID: {project_id} (not found)")
 
-        all_todo_items = []
-        for todolist in raw_todolists:
-            todo_items = self.get_todo_items_for_todo_list(todolist)
-            all_todo_items.extend(todo_items)
+        print(f"Total number of todo items found: {len(all_todo_items)}")
         return all_todo_items
+
+    def _process_todolists(self, todolists: list[RawTodoList]) -> list[TodoItemView]:
+        todo_items = []
+        for todolist in todolists:
+            todo_items.extend(self.get_todo_items_for_todo_list(todolist))
+        return todo_items
