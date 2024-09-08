@@ -103,3 +103,4 @@ ENV/
 collin-env/
 scratch.py
 .vscode/
+test-harness.sh
