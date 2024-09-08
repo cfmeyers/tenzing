@@ -9,6 +9,7 @@ from tenzing.models import (
     TodoListView,
     TodoItemView,
 )
+from tenzing.config import read_config
 
 
 class BasecampAPI:
@@ -86,3 +87,28 @@ class BasecampAPI:
         for todolist in todolists:
             todo_items.extend(self.get_todo_items_for_todo_list(todolist))
         return todo_items
+
+    def get_todos_for_user(self, user_id: str) -> list[TodoItemView]:
+        """
+        Get all todos assigned to the specified user across projects listed in the config.
+        """
+        config = read_config()
+        todos = []
+
+        for project_id in config.project_ids:
+            project = self.get_raw_project(project_id)
+            if project:
+                todolists = self.get_raw_todolists_for_project(project)
+                for todolist in todolists:
+                    todo_items = self.get_raw_todos_for_todolist(todolist)
+                    for todo in todo_items:
+                        if any(
+                            assignee["id"] == int(user_id)
+                            for assignee in todo.get("assignees", [])
+                        ):
+                            todo_item = TodoItemView.from_api_data(todo)
+                            todos.append(todo_item)
+            else:
+                print(f"Warning: Project with ID {project_id} not found.")
+
+        return todos

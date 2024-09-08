@@ -1,6 +1,8 @@
 from typing import Type, List
 from pydantic import BaseModel
+import sqlalchemy
 from sqlalchemy.orm import DeclarativeBase, Session
+from sqlalchemy import func
 
 from tenzing.db import Project, User, TodoList, TodoItem, get_session
 from tenzing.models import ProjectView, UserView, TodoListView, TodoItemView
@@ -92,3 +94,26 @@ def fully_refresh_db(api: BasecampAPI) -> None:
 
     todo_items = api.get_todo_items(project_ids=config.project_ids)
     save_to_db(todo_items)
+
+
+def get_todos_for_user_from_db() -> list[TodoItemView]:
+    config = read_config()
+    user_id = config.user_id
+    if user_id is None:
+        raise ValueError("User ID not found in configuration")
+
+    session = get_session()
+    try:
+        print(f"Searching for todos assigned to user_id: {user_id}")
+
+        db_todos = (
+            session.query(TodoItem)
+            .filter(TodoItem.assignee_ids.like(f'%"{user_id}"%'))
+            .all()
+        )
+
+        print(f"Found {len(db_todos)} todos for user_id {user_id}")
+
+        return [sqlalchemy_to_pydantic(db_todo) for db_todo in db_todos]
+    finally:
+        session.close()

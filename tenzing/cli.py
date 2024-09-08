@@ -2,14 +2,14 @@
 
 """Console script for tenzing."""
 import sys
-
 import click
 from rich import print as rprint
 from rich.table import Table
+import json
 
 from tenzing.basecamp_api import BasecampAPI, RawProject
 from tenzing.models import ProjectView, TodoListView, UserView, TodoItemView
-from tenzing.persist import fully_refresh_db
+from tenzing.persist import save_to_db, get_todos_for_user_from_db, fully_refresh_db
 
 
 @click.group()
@@ -188,6 +188,41 @@ def refresh_db():
         )
     except Exception as e:
         rprint(f"[red]Error:[/red] Failed to refresh the database. {str(e)}")
+
+
+@main.command()
+@click.option("--cached", is_flag=True, help="Get todos from the local database")
+@click.option("--json", "output_json", is_flag=True, help="Output todos in JSON format")
+def get_todos_for_user(cached, output_json):
+    """Get todos for the configured user from the projects specified in the config."""
+    api = BasecampAPI()
+
+    if cached:
+        todos = get_todos_for_user_from_db()
+    else:
+        todos = api.get_todos_for_user()
+        save_to_db(todos)
+
+    if output_json:
+        click.echo(json.dumps([todo.model_dump() for todo in todos], indent=2))
+    else:
+        table = Table(title="Todos for User")
+        table.add_column("ID", style="cyan")
+        table.add_column("Title", style="magenta")
+        table.add_column("Status", style="green")
+        table.add_column("Due Date", style="yellow")
+        # table.add_column("Project", style="blue")
+
+        for todo in todos:
+            table.add_row(
+                str(todo.id),
+                todo.title,
+                "Completed" if todo.completed else "Active",
+                todo.due_on.strftime("%Y-%m-%d") if todo.due_on else "N/A",
+                # f"{todo.project_name} ({todo.project_id})",
+            )
+
+        rprint(table)
 
 
 if __name__ == "__main__":
