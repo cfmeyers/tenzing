@@ -16,6 +16,10 @@ class BaseCampEntityView(BaseModel):
             if field in values and isinstance(values[field], str):
                 values[field] = datetime.fromisoformat(values[field].rstrip("Z"))
 
+        if "parent" in values and isinstance(values["parent"], dict):
+            values["parent_id"] = values["parent"].get("id")
+            values["parent_type"] = values["parent"].get("type")
+
         return cls(**values)
 
 
@@ -56,6 +60,8 @@ class UserView(BaseCampEntityView):
 
 
 class TodoListView(BaseCampEntityView):
+    parent_id: Optional[int] = None
+    parent_type: Optional[str] = None
     status: str
     visible_to_clients: bool
     title: str
@@ -84,6 +90,8 @@ class TodoListView(BaseCampEntityView):
 
 
 class TodoItemView(BaseCampEntityView):
+    parent_id: Optional[int] = None
+    parent_type: Optional[str] = None
     status: str
     visible_to_clients: bool
     title: str
