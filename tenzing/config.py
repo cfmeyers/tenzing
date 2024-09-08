@@ -14,6 +14,9 @@ project_ids = [
     "3668709",  # Project Gamma
 ]
 
+# User ID for fetching todos
+user_id = "12345678"
+
 """
 
 import tomllib
@@ -23,6 +26,7 @@ from typing import NamedTuple
 
 class Config(NamedTuple):
     project_ids: list[str]
+    user_id: str | None
 
 
 def read_config() -> Config:
@@ -33,10 +37,11 @@ def read_config() -> Config:
             config_data = tomllib.load(f)
     except FileNotFoundError:
         print(f"Config file not found at {config_path}")
-        return Config(project_ids=[])
+        return Config(project_ids=[], user_id=None)
     except tomllib.TOMLDecodeError:
         print(f"Error parsing config file at {config_path}")
-        return Config(project_ids=[])
+        return Config(project_ids=[], user_id=None)
 
     project_ids = config_data.get("project_ids", [])
-    return Config(project_ids=project_ids)
+    user_id = config_data.get("user_id")
+    return Config(project_ids=project_ids, user_id=user_id)
