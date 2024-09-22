@@ -11,7 +11,20 @@ from datetime import datetime, date
 from tenzing.basecamp_api import BasecampAPI, RawProject
 from tenzing.config import read_config
 from tenzing.models import ProjectView, TodoListView, UserView, TodoItemView
-from tenzing.persist import save_to_db, get_todos_for_user_from_db, fully_refresh_db
+from tenzing.persist import (
+    save_to_db,
+    get_todos_for_user_from_db,
+    fully_refresh_db,
+    sqlalchemy_to_pydantic,
+)  # Add this import at the top of the file
+from tenzing.db import (
+    get_current_todo as get_current_todo_id,
+    insert_current_todo,
+    get_session,
+    init_db,
+    TodoItem,  # Add this import at the top of the file
+)
+from tenzing.models import TodoItemView  # Add this import at the top of the file
 
 
 @click.group()
@@ -240,6 +253,80 @@ def get_todos_for_user(cached, output_json):
             )
 
         rprint(table)
+
+
+@main.command()
+@click.option(
+    "--json", "output_json", is_flag=True, help="Output current todo in JSON format"
+)
+def get_current_todo(output_json):
+    """Get the current todo item."""
+    current_todo_id = get_current_todo_id()
+    if current_todo_id is None:
+        if output_json:
+            click.echo(json.dumps({"error": "No current todo set"}))
+        else:
+            rprint("[yellow]No current todo set.[/yellow]")
+        return
+
+    with get_session() as session:
+        todo_sqlalchemy = (
+            session.query(TodoItem).filter(TodoItem.id == current_todo_id).first()
+        )
+        if todo_sqlalchemy:
+            todo_item_view = sqlalchemy_to_pydantic(todo_sqlalchemy)
+            if output_json:
+                click.echo(todo_item_view.model_dump_json(indent=2))
+            else:
+                table = Table(title="Current Todo")
+                table.add_column("ID", style="cyan")
+                table.add_column("Title", style="magenta")
+                table.add_column("Status", style="green")
+                table.add_column("Due Date", style="yellow")
+
+                table.add_row(
+                    str(todo_item_view.id),
+                    todo_item_view.title,
+                    "Completed" if todo_item_view.completed else "Not Completed",
+                    str(todo_item_view.due_on) if todo_item_view.due_on else "Not set",
+                )
+
+                rprint(table)
+        else:
+            if output_json:
+                click.echo(
+                    json.dumps(
+                        {
+                            "error": f"Todo with ID {current_todo_id} not found in the database"
+                        }
+                    )
+                )
+            else:
+                rprint(
+                    f"[red]Todo with ID {current_todo_id} not found in the database.[/red]"
+                )
+
+
+@main.command()
+@click.argument("todo_id", type=int)
+def set_current_todo(todo_id):
+    """Set the current todo item."""
+    with get_session() as session:
+        todo = session.query(TodoItem).filter(TodoItem.id == todo_id).first()
+        if todo:
+            insert_current_todo(todo_id)
+            rprint(
+                f"[green]Set todo '{todo.title}' (ID: {todo_id}) as the current todo.[/green]"
+            )
+        else:
+            rprint(f"[red]Todo with ID {todo_id} not found in the database.[/red]")
+
+
+@main.command()
+def init_database():
+    """Initialize the database and create all tables."""
+    init_db()
+    rprint("[green]Database initialized successfully.[/green]")
 
 
 if __name__ == "__main__":

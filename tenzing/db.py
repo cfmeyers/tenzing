@@ -11,6 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from sqlalchemy.dialects.sqlite import JSON
+from datetime import datetime
 
 # Create a base class for declarative models
 Base = declarative_base()
@@ -131,16 +132,38 @@ class TodoItem(BaseCampEntity):
     completion_url = Column(String)
 
 
+class CurrentTodoHistory(Base):
+    __tablename__ = "current_todo_history"
+
+    todo_id = Column(Integer, primary_key=True)
+    made_current_todo_at = Column(DateTime, default=datetime.now)
+
+
 def init_db():
-    """Initialize the database by creating all tables if they don't exist."""
     Base.metadata.create_all(engine)
+
+
+# Update these functions to use get_session()
+def insert_current_todo(todo_id: int) -> None:
+    with get_session() as session:
+        current_todo = CurrentTodoHistory(
+            todo_id=todo_id, made_current_todo_at=datetime.now()
+        )
+        session.merge(current_todo)
+        session.commit()
+
+
+def get_current_todo() -> int | None:
+    with get_session() as session:
+        current_todo = (
+            session.query(CurrentTodoHistory)
+            .order_by(CurrentTodoHistory.made_current_todo_at.desc())
+            .first()
+        )
+    return current_todo.todo_id if current_todo else None
 
 
 def get_session():
     """Get a new database session, creating the database if it doesn't exist."""
-    if not os.path.exists(DB_PATH):
-        init_db()
+    init_db()  # Always call init_db to ensure all tables exist
     return Session()
-
-
-# You can add more database-related functions here as needed
