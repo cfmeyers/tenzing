@@ -113,7 +113,7 @@ class TodoItemView(BaseCampEntityView):
     subscription_url: str
     comments_count: int
     comments_url: str
-    position: int
+    position: int | None = None  # Changed this line
     parent: dict
     bucket: dict
     creator: dict
