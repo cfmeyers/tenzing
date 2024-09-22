@@ -127,6 +127,15 @@ class TodoItemView(BaseCampEntityView):
     completion_subscribers: list[dict]
     completion_url: str
 
+    def get_todo_list_name(self) -> str:
+        """
+        Get the name of the parent todo list.
+
+        Returns:
+            str: The name of the parent todo list, or 'Unknown' if not available.
+        """
+        return self.parent.get("title", "Unknown")
+
     class Config:
         from_attributes = True
         populate_by_name = True

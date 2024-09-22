@@ -201,14 +201,15 @@ def get_todos_for_user(cached, output_json):
     if cached:
         todos = get_todos_for_user_from_db()
     else:
-
         config = read_config()
         user_id = config.user_id
         if user_id is None:
             raise ValueError("User ID not found in configuration")
         todos = api.get_todos_for_user(user_id)
-        # print(type(todos[0]))
         save_to_db(todos)
+
+    # Sort todos by parent todolist name
+    todos.sort(key=lambda todo: todo.get_todo_list_name())
 
     if output_json:
         click.echo(json.dumps([todo.model_dump() for todo in todos], indent=2))
@@ -217,16 +218,15 @@ def get_todos_for_user(cached, output_json):
         table.add_column("ID", style="cyan")
         table.add_column("Title", style="magenta")
         table.add_column("Status", style="green")
-        table.add_column("Due Date", style="yellow")
-        # table.add_column("Project", style="blue")
+        table.add_column("List", style="blue")
 
         for todo in todos:
+            parent_list_name = todo.get_todo_list_name()[:30]  # Get first 30 characters
             table.add_row(
                 str(todo.id),
                 todo.title,
                 "Completed" if todo.completed else "Active",
-                todo.due_on.strftime("%Y-%m-%d") if todo.due_on else "N/A",
-                # f"{todo.project_name} ({todo.project_id})",
+                parent_list_name,
             )
 
         rprint(table)
