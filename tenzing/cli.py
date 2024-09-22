@@ -6,6 +6,7 @@ import click
 from rich import print as rprint
 from rich.table import Table
 import json
+from datetime import datetime, date
 
 from tenzing.basecamp_api import BasecampAPI, RawProject
 from tenzing.config import read_config
@@ -208,11 +209,12 @@ def get_todos_for_user(cached, output_json):
         todos = api.get_todos_for_user(user_id)
         save_to_db(todos)
 
-    # Sort todos by parent todolist name
     todos.sort(key=lambda todo: todo.get_todo_list_name())
 
     if output_json:
-        click.echo(json.dumps([todo.model_dump() for todo in todos], indent=2))
+        todos_as_list_of_dicts = [todo.model_dump(mode="json") for todo in todos]
+        json_data = json.dumps(todos_as_list_of_dicts, indent=2)
+        click.echo(json_data)
     else:
         table = Table(title="Todos for User")
         table.add_column("ID", style="cyan")
