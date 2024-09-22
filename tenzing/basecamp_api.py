@@ -102,13 +102,30 @@ class BasecampAPI:
                 for todolist in todolists:
                     todo_items = self.get_raw_todos_for_todolist(todolist)
                     for todo in todo_items:
-                        if any(
-                            assignee["id"] == int(user_id)
-                            for assignee in todo.get("assignees", [])
-                        ):
-                            todo_item = TodoItemView.from_api_data(todo)
+                        todo_item = TodoItemView.from_api_data(todo)
+                        if user_id in todo_item.assignee_ids:
                             todos.append(todo_item)
             else:
                 print(f"Warning: Project with ID {project_id} not found.")
 
         return todos
+
+    def get_raw_todo_item(self, project_id: str, todo_id: str) -> dict | None:
+        """
+        Retrieve a specific raw to-do item based on its ID and project ID.
+
+        :param project_id: The ID of the project containing the to-do item.
+        :param todo_id: The ID of the to-do item to retrieve.
+        :return: The raw to-do item as a dictionary, or None if not found.
+        """
+        try:
+            project = self.get_raw_project(project_id)
+            if not project:
+                print(f"Project with ID {project_id} not found.")
+                return None
+            return self.bc3.todos.get(int(project), int(todo_id))
+        except Exception as e:
+            print(
+                f"Error retrieving to-do item with ID {todo_id} in project {project_id}: {str(e)}"
+            )
+            return None

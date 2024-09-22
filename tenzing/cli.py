@@ -8,6 +8,7 @@ from rich.table import Table
 import json
 
 from tenzing.basecamp_api import BasecampAPI, RawProject
+from tenzing.config import read_config
 from tenzing.models import ProjectView, TodoListView, UserView, TodoItemView
 from tenzing.persist import save_to_db, get_todos_for_user_from_db, fully_refresh_db
 
@@ -200,7 +201,13 @@ def get_todos_for_user(cached, output_json):
     if cached:
         todos = get_todos_for_user_from_db()
     else:
-        todos = api.get_todos_for_user()
+
+        config = read_config()
+        user_id = config.user_id
+        if user_id is None:
+            raise ValueError("User ID not found in configuration")
+        todos = api.get_todos_for_user(user_id)
+        # print(type(todos[0]))
         save_to_db(todos)
 
     if output_json:
