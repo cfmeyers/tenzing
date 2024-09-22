@@ -222,10 +222,18 @@ def get_todos_for_user(cached, output_json):
 
         for todo in todos:
             parent_list_name = todo.get_todo_list_name()[:30]  # Get first 30 characters
+
+            if todo.status == "trashed":
+                status = "Deleted"
+            elif todo.completed:
+                status = "Completed"
+            else:
+                status = "Active"
+
             table.add_row(
                 str(todo.id),
                 todo.title,
-                "Completed" if todo.completed else "Active",
+                status,
                 parent_list_name,
             )
 

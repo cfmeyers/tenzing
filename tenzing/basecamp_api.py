@@ -28,7 +28,9 @@ class BasecampAPI:
     def get_raw_todos_for_todolist(self, todolist: RawTodoList) -> list[dict]:
         incomplete_todos = list(self.bc3.todos.list(todolist=todolist, completed=False))
         completed_todos = list(self.bc3.todos.list(todolist=todolist, completed=True))
-        return incomplete_todos + completed_todos
+        archived_todos = list(self.bc3.todos.list(todolist=todolist, status="archived"))
+        trashed_todos = list(self.bc3.todos.list(todolist=todolist, status="trashed"))
+        return incomplete_todos + completed_todos + archived_todos + trashed_todos
 
     def get_raw_todolists_for_project(self, project: RawProject) -> list[RawTodoList]:
         return list(self.bc3.todolists.list(project=project))
