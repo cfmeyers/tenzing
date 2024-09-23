@@ -14,7 +14,8 @@ from tenzing.config import read_config
 
 class BasecampAPI:
     def __init__(self) -> None:
-        self.bc3 = Basecamp3.from_environment()
+        # self.bc3 = Basecamp3.from_environment()
+        self.bc3 = Basecamp3()
 
     def get_raw_projects(self) -> list[RawProject]:
         return list(self.bc3.projects.list())
