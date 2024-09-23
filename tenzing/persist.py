@@ -104,15 +104,11 @@ def get_todos_for_user_from_db() -> list[TodoItemView]:
 
     session = get_session()
     try:
-        print(f"Searching for todos assigned to user_id: {user_id}")
-
         db_todos = (
             session.query(TodoItem)
             .filter(TodoItem.assignee_ids.like(f'%"{user_id}"%'))
             .all()
         )
-
-        print(f"Found {len(db_todos)} todos for user_id {user_id}")
 
         return [sqlalchemy_to_pydantic(db_todo) for db_todo in db_todos]
     finally:

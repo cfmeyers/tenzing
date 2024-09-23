@@ -208,7 +208,8 @@ def refresh_db():
 @main.command()
 @click.option("--cached", is_flag=True, help="Get todos from the local database")
 @click.option("--json", "output_json", is_flag=True, help="Output todos in JSON format")
-def get_todos_for_user(cached, output_json):
+@click.option("--active-only", is_flag=True, help="Only show active todos")
+def get_todos_for_user(cached, output_json, active_only):
     """Get todos for the configured user from the projects specified in the config."""
     api = BasecampAPI()
 
@@ -221,6 +222,11 @@ def get_todos_for_user(cached, output_json):
             raise ValueError("User ID not found in configuration")
         todos = api.get_todos_for_user(user_id)
         save_to_db(todos)
+
+    if active_only:
+        todos = [
+            todo for todo in todos if not todo.completed and todo.status != "trashed"
+        ]
 
     todos.sort(key=lambda todo: todo.get_todo_list_name())
 
