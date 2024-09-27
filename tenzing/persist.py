@@ -113,3 +113,39 @@ def get_todos_for_user_from_db() -> list[TodoItemView]:
         return [sqlalchemy_to_pydantic(db_todo) for db_todo in db_todos]
     finally:
         session.close()
+
+
+def get_todolist_from_db(todolist_id: int) -> TodoListView | None:
+    """
+    Retrieve a specific TodoList from the database by its ID.
+
+    Args:
+        todolist_id (int): The ID of the TodoList to retrieve.
+
+    Returns:
+        TodoListView | None: The TodoList as a TodoListView if found, None otherwise.
+    """
+    session = get_session()
+    try:
+        db_todolist = session.query(TodoList).filter(TodoList.id == todolist_id).first()
+        return sqlalchemy_to_pydantic(db_todolist) if db_todolist else None
+    finally:
+        session.close()
+
+
+def get_project_from_db(project_id: int) -> ProjectView | None:
+    """
+    Retrieve a specific Project from the database by its ID.
+
+    Args:
+        project_id (int): The ID of the Project to retrieve.
+
+    Returns:
+        ProjectView | None: The Project as a ProjectView if found, None otherwise.
+    """
+    session = get_session()
+    try:
+        db_project = session.query(Project).filter(Project.id == project_id).first()
+        return sqlalchemy_to_pydantic(db_project) if db_project else None
+    finally:
+        session.close()

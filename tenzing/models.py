@@ -94,6 +94,30 @@ class TodoListView(BaseCampEntityView):
     groups_url: str
     app_todos_url: str
 
+    def get_project_id(self) -> int:
+        """
+        Extract the project_id from the todos_url.
+
+        Returns:
+            int: The project_id extracted from the todos_url.
+
+        Raises:
+            ValueError: If the project_id cannot be extracted from the todos_url.
+        """
+        try:
+            # Split the URL and extract the part after '/buckets/'
+            parts = self.todos_url.split("/buckets/")
+            if len(parts) < 2:
+                raise ValueError("Invalid todos_url format")
+
+            # Extract the project_id
+            project_id = parts[1].split("/")[0]
+            return int(project_id)
+        except (IndexError, ValueError):
+            raise ValueError(
+                f"Unable to extract project_id from todos_url: {self.todos_url}"
+            )
+
     class Config:
         from_attributes = True
         populate_by_name = True

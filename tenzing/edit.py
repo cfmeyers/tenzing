@@ -5,7 +5,7 @@ import frontmatter
 import markdown
 from tenzing.models import TodoItemView
 from tenzing.basecamp_api import BasecampAPI
-from tenzing.persist import save_to_db
+from tenzing.persist import save_to_db, get_todolist_from_db, get_project_from_db
 from tenzing.config import read_config
 
 
@@ -14,9 +14,32 @@ def get_editor():
 
 
 def create_todo_template(todolist_id=None):
+    project_id = None
+    project_name = None
+    todolist_name = None
+
+    if todolist_id is not None:
+        todolist = get_todolist_from_db(todolist_id)
+        if todolist:
+            project_id = todolist.get_project_id()
+            todolist_name = todolist.title
+
+            if project_id:
+                project = get_project_from_db(project_id)
+                if project:
+                    project_name = project.name
+
+    todolist_id_line = f"{todolist_id or ''}"
+    if todolist_name:
+        todolist_id_line += f" ({todolist_name})"
+
+    project_id_line = f"{project_id or ''}"
+    if project_name:
+        project_id_line += f" ({project_name})"
+
     return f"""---
-project_id: 
-todolist_id: {todolist_id or ''}
+project_id: {project_id_line}
+todolist_id: {todolist_id_line}
 title: 
 ---
 
@@ -39,8 +62,12 @@ def edit_todo(todolist_id=None):
         with open(temp_file_path, "r") as file:
             post = frontmatter.load(file)
 
-        project_id = post.get("project_id")
-        todolist_id = post.get("todolist_id")
+        project_id = (
+            post.get("project_id").split("(")[0].strip()
+        )  # Remove everything in parentheses
+        todolist_id = (
+            post.get("todolist_id").split("(")[0].strip()
+        )  # Remove everything in parentheses
         title = post.get("title")
         body = markdown.markdown(post.content)
 
