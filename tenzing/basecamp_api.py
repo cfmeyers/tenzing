@@ -134,3 +134,40 @@ class BasecampAPI:
                 f"Error retrieving to-do item with ID {todo_id} in project {project_id}: {str(e)}"
             )
             return None
+
+    def create_todo(
+        self, project_id: int, todolist_id: int, title: str, body: str, assignee_id: int
+    ) -> dict | None:
+        """
+        Create a new todo in Basecamp.
+
+        Args:
+            project_id (int): The ID of the project where the todo will be created.
+            todolist_id (int): The ID of the todolist where the todo will be added.
+            title (str): The title of the todo.
+            body (str): The detailed description of the todo.
+            assignee_id (int): The ID of the user to whom the todo will be assigned.
+
+        Returns:
+            dict | None: The created todo data as returned by the Basecamp API, or None if an error occurs.
+        """
+        try:
+            project = self.get_raw_project(str(project_id))
+            print(f"Project: {project}")
+            if not project:
+                print(f"Project with ID {project_id} not found.")
+                return None
+
+            # todolist = self.bc3.todolists.get(project, todolist_id)
+            todolist = self.bc3.todolists.get(todolist_id, project)
+            new_todo = self.bc3.todos.create(
+                content=title,
+                todolist=todolist,
+                description=body,
+                assignee_ids=[assignee_id],
+            )
+
+            return new_todo
+        except Exception as e:
+            print(f"Error creating todo: {str(e)}")
+            return None

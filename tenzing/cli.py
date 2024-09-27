@@ -242,7 +242,7 @@ def get_todos_for_user(cached, output_json, active_only):
         table.add_column("List", style="blue")
 
         for todo in todos:
-            parent_list_name = todo.get_todo_list_name()[:30]  # Get first 30 characters
+            parent_list_name = f"{todo.get_todo_list_name()[:30]} ({todo.parent_id})"
 
             if todo.status == "trashed":
                 status = "Deleted"
@@ -333,6 +333,52 @@ def init_database():
     """Initialize the database and create all tables."""
     init_db()
     rprint("[green]Database initialized successfully.[/green]")
+
+
+@main.command()
+@click.option("--title", prompt=True, help="The title of the todo")
+@click.option("--body", prompt=True, help="The detailed description of the todo")
+@click.option("--todolist-id", type=int, prompt=True, help="The ID of the todolist")
+@click.option("--project-id", type=int, prompt=True, help="The ID of the project")
+def create_todo(title, body, todolist_id, project_id):
+    """Create a new todo in Basecamp and save it to the local database."""
+    api = BasecampAPI()
+    config = read_config()
+
+    # Use the current user's ID from config.toml
+    assignee_id = config.user_id
+
+    # Call the Basecamp API to create the todo
+    new_todo = api.create_todo(project_id, todolist_id, title, body, assignee_id)
+
+    if new_todo:
+        # Save the new todo to the local database
+        todo_view = TodoItemView.from_api_data(new_todo)
+        save_to_db([todo_view])
+
+        # Display success message with the new todo's details
+        table = Table(title="New Todo Created")
+        table.add_column("Field", style="cyan")
+        table.add_column("Value", style="magenta")
+
+        table.add_row("ID", str(todo_view.id))
+        table.add_row("Title", todo_view.title)
+        table.add_row(
+            "Body",
+            (
+                todo_view.description[:50] + "..."
+                if len(todo_view.description) > 50
+                else todo_view.description
+            ),
+        )
+        table.add_row("Project ID", str(project_id))
+        table.add_row("Todolist ID", str(todo_view.parent_id))
+        table.add_row("Assignee ID", str(assignee_id))
+
+        rprint("[green]Todo created successfully![/green]")
+        rprint(table)
+    else:
+        rprint("[red]Failed to create todo.[/red]")
 
 
 if __name__ == "__main__":
