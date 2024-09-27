@@ -18,6 +18,8 @@ requirements = [
     "pydantic==2.8.2",
     "basecampy3==0.7.2",
     "SQLAlchemy==2.0.34",
+    "Markdown==3.7",
+    "python-frontmatter==1.1.0",
 ]
 
 setup_requirements = [

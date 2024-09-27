@@ -16,15 +16,16 @@ from tenzing.persist import (
     get_todos_for_user_from_db,
     fully_refresh_db,
     sqlalchemy_to_pydantic,
-)  # Add this import at the top of the file
+)
 from tenzing.db import (
     get_current_todo as get_current_todo_id,
     insert_current_todo,
     get_session,
     init_db,
-    TodoItem,  # Add this import at the top of the file
+    TodoItem,
 )
-from tenzing.models import TodoItemView  # Add this import at the top of the file
+from tenzing.models import TodoItemView
+from tenzing.edit import create_todo_from_editor
 
 
 @click.group()
@@ -379,6 +380,24 @@ def create_todo(title, body, todolist_id, project_id):
         rprint(table)
     else:
         rprint("[red]Failed to create todo.[/red]")
+
+
+@main.command()
+@click.option(
+    "--todolist-id",
+    type=int,
+    help="The ID of the todolist to create the todo in",
+    default=None,
+)
+def create_todo_editor(todolist_id):
+    """Create a new todo using the default editor."""
+    new_todo = create_todo_from_editor(todolist_id)
+    if new_todo:
+        click.echo(
+            f"Todo '{new_todo.title}' created successfully in todolist {new_todo.parent_id}"
+        )
+    else:
+        click.echo("Failed to create todo")
 
 
 if __name__ == "__main__":
