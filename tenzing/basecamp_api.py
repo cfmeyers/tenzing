@@ -128,7 +128,7 @@ class BasecampAPI:
             if not project:
                 print(f"Project with ID {project_id} not found.")
                 return None
-            return self.bc3.todos.get(int(project), int(todo_id))
+            return self.bc3.todos.get(int(todo_id), int(project))
         except Exception as e:
             print(
                 f"Error retrieving to-do item with ID {todo_id} in project {project_id}: {str(e)}"
